@@ -4,7 +4,7 @@ __pycache__/
 *.pyc
 
 # Чувствительные данные
-secret.py
+.env
+*.csv
 
 .idea/
-*.csv

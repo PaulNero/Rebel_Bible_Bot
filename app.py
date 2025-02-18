@@ -8,12 +8,16 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.filters import Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-import secret
+from dotenv import load_dotenv
+import re
 
-TOKEN = secret.TOKEN
-CHANNEL_ID = secret.CHANNEL_ID
+load_dotenv()
+
+TOKEN = os.getenv("TOKEN")
+CHANNEL_ID = os.getenv("CHANNEL_ID")
+LINK = os.getenv("LINK")
+
 CSV_FILE = "REBEL_BIBLE_BOT.csv"
-LINK = secret.LINK
 
 logging.basicConfig(level=logging.INFO)
 
