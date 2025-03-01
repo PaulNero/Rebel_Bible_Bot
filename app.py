@@ -33,14 +33,14 @@ class Survey(StatesGroup):
 
 def get_brands_keyboard(selected_brands):
     keyboard = []
-    brands = ["Reuzel", "Lock Stock", "Morgan’s", "REBEL", "NishMan", "Dream Catcher", "Boy's Toys", "KONDOR",
-              "White Cosmetics", "Maestro"]
+    brands = ["Reuzel", "Lock Stock", "Morgan’s", "REBEL", "Dream Catcher", "Boy's Toys", "KONDOR", "NishMan",
+              "White Cosmetics", "London Grooming"]
     for brand in brands:
         text = f"✅ {brand}" if brand in selected_brands else brand
         keyboard.append([InlineKeyboardButton(text=text, callback_data=f"brand_{brand}")])
     if selected_brands:
         keyboard.append([InlineKeyboardButton(text="❌ Отменить выбор", callback_data="cancel_brand")])
-    keyboard.append([InlineKeyboardButton(text="✅ Завершить выбор", callback_data="finish_brands")])
+        keyboard.append([InlineKeyboardButton(text="✅ Завершить выбор", callback_data="finish_brands")])
     return InlineKeyboardMarkup(inline_keyboard=keyboard)
 
 price_keyboard = ReplyKeyboardMarkup(
@@ -70,7 +70,7 @@ async def process_name_city(message: types.Message, state: FSMContext):
 async def process_price(message: types.Message, state: FSMContext):
     if message.text not in ["Дешевле 800 руб.", "800–1000 руб.", "1000–1400 руб.", "1400–2000 руб.", "2000–3000 руб.",
                             "Свыше 3000 руб."]:
-        await message.answer("Пожалуйста, выбери вариант из списка.")
+        await message.answer("Пожалуйста, выбери вариант из списка. \n\nЕсли клавиатура недоступна, нажмите на иконку 🎛 справа от строки ввода.")
         return
     await state.update_data(price=message.text)
     await message.answer("Норм-норм)) А на каких брендах косметики работаешь? (можно выбрать несколько вариантов)",
@@ -85,16 +85,18 @@ async def process_brand(callback: types.CallbackQuery, state: FSMContext):
 
     if callback.data.startswith("brand_"):
         brand = callback.data.replace("brand_", "")
-        if brand not in selected_brands:
+        if brand in selected_brands:
+            selected_brands.remove(brand)  # Снимаем выбор
+        else:
             selected_brands.append(brand)
         await state.update_data(brands=selected_brands)
     elif callback.data == "cancel_brand" and selected_brands:
-        selected_brands.pop()
+        selected_brands.clear()  # Полностью сбрасываем выбор
         await state.update_data(brands=selected_brands)
     elif callback.data == "finish_brands":
         await callback.message.delete_reply_markup()
         await callback.message.answer(
-            "Крутяк!👏 Остался последний шаг и гайд твой! Напиши ник своего аккаунта в инстаграм (пример: @ahuennyi_barber) и номер телефона.")
+            "Крутяк!👏 Остался последний шаг и гайд твой! Напиши ник своего аккаунта в инстаграм и номер телефона (пример: @ahuennyi_barber, +79999999999).")
         await state.set_state(Survey.contact)
         return
     await callback.message.edit_reply_markup(reply_markup=get_brands_keyboard(selected_brands))
