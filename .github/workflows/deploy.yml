@@ -1,0 +1,23 @@
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout репозиторий
+        uses: actions/checkout@v4
+
+      - name: Установка Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Установка зависимостей
+        run: pip install -r requirements.txt
+
+      - name: Установка переменных окружения
+        run: |
+          echo "TOKEN=${{ secrets.TOKEN }}" >> $GITHUB_ENV
+          echo "TOKEN=${{ secrets.CHANNEL_ID }}" >> $GITHUB_ENV
+          echo "TOKEN=${{ secrets.LINK }}" >> $GITHUB_ENV
+
+      - name: Запуск бота
+        run: python bot.py
