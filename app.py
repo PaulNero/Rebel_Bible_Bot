@@ -79,7 +79,7 @@ async def process_price(message: types.Message, state: FSMContext):
     await state.update_data(price=message.text)
     await message.answer("Норм-норм)) А на каких брендах косметики работаешь? (можно выбрать несколько вариантов)",
                          reply_markup=get_brands_keyboard([]))
-    await state.set_state(Survey.brands)
+    await state.set_state(Survey.brands) 
 
 @dp.callback_query(Survey.brands)
 async def process_brand(callback: types.CallbackQuery, state: FSMContext):
