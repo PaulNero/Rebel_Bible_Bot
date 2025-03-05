@@ -83,6 +83,7 @@ async def process_price(message: types.Message, state: FSMContext):
     await state.set_state(Survey.brands)
 
 @dp.callback_query(Survey.brands)
+
 async def process_brand(callback: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     selected_brands = data.get("brands", [])
