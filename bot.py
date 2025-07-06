@@ -13,7 +13,7 @@ import re
 
 load_dotenv()
 
-TOKEN = os.getenv("TOKEN")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 CHANNEL_ID = os.getenv("CHANNEL_ID")
 LINK = os.getenv("LINK")
 
@@ -21,7 +21,7 @@ CSV_FILE = "REBEL_BIBLE_BOT.csv"
 
 logging.basicConfig(level=logging.INFO)
 
-bot = Bot(token=TOKEN)
+bot = Bot(token=TELEGRAM_BOT_TOKEN)
 storage = MemoryStorage()
 dp = Dispatcher(storage=storage)
 

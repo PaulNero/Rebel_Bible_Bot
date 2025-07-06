@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  rebel_bible_bot:
+    build: .
+    container_name: rebel_bible_bot
+    restart: unless-stopped
+    env_file:
+      - .env
